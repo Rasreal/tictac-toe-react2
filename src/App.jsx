@@ -18,12 +18,16 @@ function derivePlayer(gameTurns) {
   return curPlayer;
 }
 function App() {
+  const [players, setPlayers] = useState({
+    X: "Player 1",
+    O: "Player 2",
+  });
   const [gameTurns, setGameTurns] = useState([]);
 
   let activePlayer = derivePlayer(gameTurns);
 
-  let winner = null
-  let gameBoard = [...initialGameBoard.map(arr => [...arr])];
+  let winner = null;
+  let gameBoard = [...initialGameBoard.map((arr) => [...arr])];
 
   for (const turn of gameTurns) {
     const { square, player } = turn;
@@ -41,16 +45,21 @@ function App() {
       firstSymbol === secondSymbol &&
       secondSymbol === thirdSymbol
     ) {
-      winner = firstSymbol
+      winner = players[firstSymbol];
       break;
     }
   }
 
   const draw = !winner && gameTurns.length === 9;
 
-  function restart(){
+  function restart() {
     setGameTurns([]);
-    
+  }
+
+  function handlePlayerNameChange(symbol, newName) {
+    setPlayers((prevName) => {
+      return { ...prevName, [symbol]: newName };
+    });
   }
 
   function handleSquareClick(rowIx, colIx) {
@@ -69,10 +78,10 @@ function App() {
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player name="Player 1" symbol="X" activePlayer={activePlayer} />
-          <Player name="Player 2" symbol="O" activePlayer={activePlayer} />
+          <Player name="Player 1" symbol="X" activePlayer={activePlayer} changeNameFunction={handlePlayerNameChange} />
+          <Player name="Player 2" symbol="O" activePlayer={activePlayer} changeNameFunction={handlePlayerNameChange}/>
         </ol>
-        {(winner || draw) && <GameOver winner={winner} restartFunc={restart}/>}
+        {(winner || draw) && <GameOver winner={winner} restartFunc={restart} />}
         <GameBoard onSelectSquare={handleSquareClick} board={gameBoard} />
       </div>
     </main>

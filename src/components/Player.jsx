@@ -2,7 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 
-export default function Player({ name, symbol, activePlayer }) {
+export default function Player({ name, symbol, activePlayer, changeNameFunction }) {
   const [isEdit, setEdit] = useState(false);
   const [playerName, setPlayerName] = useState(name);
   let editBtn = <button onClick={editBtnHandler}>Edit</button>;
@@ -13,6 +13,7 @@ export default function Player({ name, symbol, activePlayer }) {
   }
   function saveBtnHandler() {
     setEdit(false);
+    changeNameFunction(symbol, playerName);
   }
   function nameEditHandler(event) {
     console.log(event.target.value);
